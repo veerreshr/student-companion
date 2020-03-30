@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    animation: all ease;
+    border: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.superwrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrap {
+    display: block;
+    min-height: 60vh;
+    padding: 5vh 5vw;
+    width: max-content;
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+
+/* Style the buttons inside the tab */
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+/* to register */
+
+.error {
+    width: 92%;
+    margin: 0px auto;
+    padding: 10px;
+    border: 1px solid #a94442;
+    color: #a94442;
+    background: #f2dede;
+    border-radius: 5px;
+    text-align: left;
+    font-weight: bolder;
+}
+
+form {
+    width: 90%;
+}
+
+input {
+    position: relative;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+}
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.container {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background-color: rgb(241, 241, 241, 0.4);
+    color: #000;
+    position: relative;
+    padding: 30px;
+    margin-top: 10px;
+}
+
+#message {
+    display: none;
+    background-color: rgb(241, 241, 241, 0.3);
+    color: #000;
+    position: relative;
+    padding: 20px;
+    margin-top: 10px;
+    width: 60vw;
+}
+
+#message p {
+    padding: 10px 35px;
+    font-size: 18px;
+}
+
+.valid {
+    color: green;
+}
+
+.valid::before {
+    position: relative;
+    left: -35px;
+    content: "\2714";
+}
+
+.invalid {
+    color: red;
+}
+
+.invalid::before {
+    position: relative;
+    left: -35px;
+    content: "\2716";
+}
+
+
+/* end for register */
+
+
+/* media queries */
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 300px;
+        padding: 20px;
+    }
+}
+
+
+/* end of media queries */

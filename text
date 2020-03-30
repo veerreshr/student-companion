@@ -1,0 +1,6 @@
+Works:
+
+<input type="datetime-local" value="2000-01-01T00:00:00" />
+PHP for value (windows safe):
+
+strftime('%Y-%m-%dT%H:%M:%S', strtotime($my_datetime_input))
