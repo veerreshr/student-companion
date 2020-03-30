@@ -7,6 +7,14 @@ if (!isset($_SESSION['name'])) {
     $_SESSION['msg'] = "You must log in first";
     header('location: ./login/login.php');
 }
+$query="select * from week where id='".$_SERVER['id']."'";
+$result = mysqli_query($db, $query);
+$rowcount=mysqli_num_rows($result);
+if($rowcount==0){
+    header('location: ./details/details.php');
+}
+
+
 if (isset($_GET['logout'])) {
     session_destroy();
     unset($_SESSION['username']);
@@ -52,16 +60,24 @@ if (isset($_GET['logout'])) {
             <table>
                 <tr>
                     <th></th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>6</th>
-                    <th>7</th>
-                    <th>8</th>
-                    <th>9</th>
-                    <th>10</th>
+                    <?php
+                    $query = "select min(stime) as mini from week where id='" . $_SESSION['id'] . "'";
+                    $result = mysqli_query($db, $query);
+                    $user = mysqli_fetch_assoc($result);
+                    $startsAt = strtotime($user['mini']);
+                    $query = "select max(etime)as maxi from week where id='" . $_SESSION['id'] . "'";
+                    $result = mysqli_query($db, $query);
+                    $user = mysqli_fetch_assoc($result);
+                    $endsAt = strtotime($user['maxi']);
+                    $twh = ceil(($endsAt - $startsAt) / 3600); // approximated total working hours
+                    $starttime = $startsAt;
+                    for ($i = 0; $i < $twh; $i++) {
+                    ?>
+                        <th class="time"><?php echo gmdate("H:i:s", $starttime) . "-" . gmdate("H:i:s", $starttime + 3600); ?></th>
+                    <?php
+                        $starttime = $starttime + 3600;
+                    }
+                    ?>
                 </tr>
                 <tr>
                     <th>Mon</th>
@@ -144,9 +160,9 @@ if (isset($_GET['logout'])) {
                 <input type="date" name="" id="">
                 <input type="time" name="" id="">
                 <input type="week" name="" id="">
-                
+
                 <span onclick="newElement()" class="addBtn">Add</span>
-              
+
             </div>
 
             <ul id="myUL">

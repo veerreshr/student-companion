@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['id'] = 1;
+
 $_SESSION['weekid'] = 0;
 $db = mysqli_connect('localhost', 'root', '', 'dbms_project') or die("connection failed at begin");
 $query = "select MAX(weekid)AS max from week where id='" . $_SESSION['id'] . "'";
@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
         ?>
     </div>
     <div class="enter">
-        <button onclick="displaymodal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        <button id="add" onclick="displaymodal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
         <div id="modal">
 
             <div id="modal-content">

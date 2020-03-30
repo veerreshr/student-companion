@@ -4,6 +4,20 @@
     box-sizing: border-box;
 }
 
+.classes {
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+    min-width: 90vw;
+    overflow: scroll;
+}
+
+.classes::after {
+    content: 'hello';
+    top: 0;
+    left: 0;
+}
+
 .modal {
     display: none;
     /* Hidden by default */

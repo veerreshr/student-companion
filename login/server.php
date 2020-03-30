@@ -57,7 +57,10 @@ if (isset($_POST['reg_user'])) {
     }
   
    
-
+    $query="select id from register where email='".$email."'";
+    $result = mysqli_query($db, $query);
+    $user = mysqli_fetch_assoc($result);
+    $_SESSION['id']=$user['id'];
     $_SESSION['name'] =$name;
 
     $_SESSION['email'] =$email;
@@ -100,7 +103,7 @@ if (isset($_POST['login_user'])) {
       $user = mysqli_fetch_assoc($results);
       $_SESSION['name'] = $user['name'];
       $_SESSION['email'] = $user['email'];
-     
+      $_SESSION['id']=$user['id'];
       $_SESSION['success'] = "You are now logged in";
       header('location: ../index.php');
     } else {
