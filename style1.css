@@ -328,3 +328,9 @@ input {
 
 
 /* end for todo */
+
+.time {
+    width: auto;
+    padding: 10px;
+    margin: 10px;
+}

@@ -71,9 +71,10 @@ if (isset($_GET['logout'])) {
                     $endsAt = strtotime($user['maxi']);
                     $twh = ceil(($endsAt - $startsAt) / 3600); // approximated total working hours
                     $starttime = $startsAt;
+                    $wte=100/$twh;//width of time element 
                     for ($i = 0; $i < $twh; $i++) {
                     ?>
-                        <th class="time"><?php echo gmdate("H:i:s", $starttime) . "-" . gmdate("H:i:s", $starttime + 3600); ?></th>
+                        <th class="time" style><?php echo gmdate("H:i:s", $starttime) . "-" . gmdate("H:i:s", $starttime + 3600); ?></th>
                     <?php
                         $starttime = $starttime + 3600;
                     }

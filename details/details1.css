@@ -7,15 +7,9 @@
 .classes {
     display: flex;
     flex-flow: column;
-    min-height: 100vh;
+    min-height: 80vh;
     min-width: 90vw;
     overflow: scroll;
-}
-
-.classes::after {
-    content: 'hello';
-    top: 0;
-    left: 0;
 }
 
 .modal {
@@ -132,4 +126,59 @@ button .fa:active {
     border: 1px solid #888;
     width: 80%;
     overflow: hidden;
+}
+
+input,
+select {
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+}
+
+.goal {
+    display: flex;
+    justify-content: space-evenly;
+    max-height: 6vh;
+    position: absolute;
+    bottom: 0vh;
+    margin: 10px;
+    width: 100%;
+}
+
+.goal input {
+    width: auto;
+}
+
+
+/* card styling */
+
+.column {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+}
+
+.row {
+    margin: 0 -5px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: #f1f1f1;
 }
