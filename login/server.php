@@ -8,6 +8,7 @@ $errors = array();
 // connect to the database
 $db = mysqli_connect('localhost', 'root', '', 'dbms_project') or die("connection failed at begin");
 
+
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
   // receive all input values from the form
