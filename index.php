@@ -7,7 +7,7 @@ if (!isset($_SESSION['name'])) {
     $_SESSION['msg'] = "You must log in first";
     header('location: ./login/login.php');
 }
-$query="select * from week where id='".$_SERVER['id']."'";
+$query="select * from week where id='".$_SESSION['id']."'";
 $result = mysqli_query($db, $query);
 $rowcount=mysqli_num_rows($result);
 if($rowcount==0){

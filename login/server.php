@@ -66,7 +66,7 @@ if (isset($_POST['reg_user'])) {
     $_SESSION['email'] =$email;
     
     $_SESSION['success'] = "You are now logged in";
-    header('location: ../index.php');
+    header('location: index.php');
   }
 }
 

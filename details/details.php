@@ -1,22 +1,24 @@
 <?php
 session_start();
-if (isset($_POST['attendence'])) {
-    $goal = $_POST['goal'];
-    $query = "insert into register(goal) values($goal) where id='" . $_SESSION['id'] . "'";
-    if (!mysqli_query($db, $query)) {
-        echo ("Error description: " . mysqli_error($db));
-        return;
-    }
-    header('location : ../index.php');
-}
-$_SESSION['weekid'] = 0;
 $db = mysqli_connect('localhost', 'root', '', 'dbms_project') or die("connection failed at begin");
-$query = "select MAX(weekid)AS max from week where id='" . $_SESSION['id'] . "'";
+$_SESSION['weekid'] = 0;
+
+$query = "select MAX(weekid) AS max from week where id='" . $_SESSION['id'] . "'";
 $result = mysqli_query($db, $query)  or die(mysqli_error($db));
 if (mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
     $weekid = $row["max"];
     $_SESSION['weekid'] = $weekid;
+}
+
+if (isset($_POST['attendence'])) {
+    $goal = $_POST['goal'];
+    $query = "update register set goal='".$goal."' where id='".$_SESSION['id']."'";
+    if (!mysqli_query($db, $query)) {
+        echo ("Error description: " . mysqli_error($db));
+        return;
+    }
+    header('location: /student%20companion/index.php');
 }
 
 
@@ -41,6 +43,7 @@ if (isset($_POST['submit'])) {
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="details.css">
+    
 </head>
 
 <body>
