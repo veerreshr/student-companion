@@ -6,6 +6,7 @@ $date = date("Y-m-d");
 if (!isset($_SESSION['name'])) {
     $_SESSION['msg'] = "You must log in first";
     header('location: ./login/login.php');
+    return;
 }
 $query="select * from week where id='".$_SESSION['id']."'";
 $result = mysqli_query($db, $query);
@@ -16,8 +17,9 @@ if($rowcount==0){
 
 
 if (isset($_GET['logout'])) {
+    session_unset();
     session_destroy();
-    unset($_SESSION['username']);
+   
     header("location: ./login/login.php");
 }
 

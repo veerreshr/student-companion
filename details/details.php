@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['name'])) {
+    $_SESSION['msg'] = "You must log in first";
+    header('location: ./login/login.php');
+    return;
+}
 $db = mysqli_connect('localhost', 'root', '', 'dbms_project') or die("connection failed at begin");
 $_SESSION['weekid'] = 0;
 
