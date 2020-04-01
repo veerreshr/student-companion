@@ -4,3 +4,18 @@ Works:
 PHP for value (windows safe):
 
 strftime('%Y-%m-%dT%H:%M:%S', strtotime($my_datetime_input))
+
+
+
+
+
+
+/* show the text field as asterisks in normal mode */
+input[name="password"] {
+  -webkit-text-security: disc;
+}
+
+/* if show password is checked, show the actual text */
+input[name="show-password"]:checked ~ input[name="password"] {
+  -webkit-text-security: none;
+}

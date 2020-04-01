@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="login.css">
+    <link rel="stylesheet" type="text/css" href="login1.css">
 </head>
 
 <body>
@@ -37,16 +37,16 @@
                             PASSWORD
                         </label><br>
                         <input type="password" placeholder="password" name="password_1" id="psw" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Must contain at least one number and one uppercase and lowercase letter , and at least 8 or more characters" required><br>
+                        
                         <label for="cpsw">
                             CONFIRM PASSWORD
                         </label><br>
                         <input type="password" placeholder="confirm password" name="password_2" id="cpsw" required onchange="conPassCheck()"><br>
                         <span id="passMessage"></span><br>
                        <input type="submit" id="submit" name="reg_user" value="Register"><br>
-
+                       
                     </form>
-                </div>
-                <div id="message">
+                    <div id="message">
                     <h3>
                         Password must contain the following:
                     </h3>
@@ -58,6 +58,8 @@
                         </b></p>
                     <p id="length" class="invalid">minimum <b>8 characters</b></p>
                 </div>
+                </div>
+                
 
             </div>
             <div id="login" class="tabcontent">
