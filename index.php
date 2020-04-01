@@ -1,6 +1,6 @@
 <?php
 session_start();
-$db = mysqli_connect('localhost', 'root', '', 'dbms_project');
+require 'db.php';
 $date = date("Y-m-d");
 
 if (!isset($_SESSION['name'])) {

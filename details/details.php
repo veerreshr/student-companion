@@ -5,7 +5,7 @@ if (!isset($_SESSION['name'])) {
     header('location: ./login/login.php');
     return;
 }
-$db = mysqli_connect('localhost', 'root', '', 'dbms_project') or die("connection failed at begin");
+require 'db.php';
 $_SESSION['weekid'] = 0;
 
 $query = "select MAX(weekid) AS max from week where id='" . $_SESSION['id'] . "'";

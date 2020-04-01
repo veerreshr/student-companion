@@ -6,7 +6,7 @@ session_start();
 $errors = array();
 
 // connect to the database
-$db = mysqli_connect('localhost', 'root', '', 'dbms_project') or die("connection failed at begin");
+require 'db.php';
 
 
 // REGISTER USER
