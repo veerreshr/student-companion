@@ -19,3 +19,11 @@ input[name="password"] {
 input[name="show-password"]:checked ~ input[name="password"] {
   -webkit-text-security: none;
 }
+
+
+
+date_default_timezone_set('Asia/Kolkata');
+
+
+
+19800 //+5:30 , required to substract this from local time

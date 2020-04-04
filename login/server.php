@@ -6,7 +6,7 @@ session_start();
 $errors = array();
 
 // connect to the database
-require 'db.php';
+require '../db.php';
 
 
 // REGISTER USER
