@@ -5,7 +5,7 @@ if (!isset($_SESSION['name'])) {
     header('location: ./login/login.php');
     return;
 }
-require 'db.php';
+require '../db.php';
 $_SESSION['weekid'] = 0;
 
 $query = "select MAX(weekid) AS max from week where id='" . $_SESSION['id'] . "'";
@@ -15,7 +15,6 @@ if (mysqli_num_rows($result) > 0) {
     $weekid = $row["max"];
     $_SESSION['weekid'] = $weekid;
 }
-
 if (isset($_POST['attendence'])) {
     $goal = $_POST['goal'];
     $query = "update register set goal='".$goal."' where id='".$_SESSION['id']."'";
@@ -85,7 +84,7 @@ if (isset($_POST['submit'])) {
                         <option value="Mon">Monday</option>
                         <option value="Tue">Tuesday</option>
                         <option value="Wed">Wednesday</option>
-                        <option value="Thur">Thursday</option>
+                        <option value="Thu">Thursday</option>
                         <option value="Fri">Friday</option>
                         <option value="Sat">Saturday</option>
                         <option value="Sun">Sunday</option>
@@ -99,7 +98,7 @@ if (isset($_POST['submit'])) {
     </div>
     <!-- attendence goal and submit butten to be added -->
     <div class="goal">
-        <form action="details.php" method="post">
+        <form action='details.php' method="post">
             <label for="goal">Attendence goal :</label>
             <input type="text" name="goal" placeholder="Attendence goal"> %
             <input type="submit" name="attendence" value="Done">

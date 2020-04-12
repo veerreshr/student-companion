@@ -164,7 +164,6 @@ a {
 .timetable {
     width: 100%;
     display: block;
-    text-align: center;
 }
 
 .row1 {
@@ -191,83 +190,40 @@ a {
     height: 10vh;
     padding: 10px;
     background-color: #ffd3b6;
-    border: 1px solid white;
-    margin: 0px;
+    margin: 3px;
     text-align: center;
-    overflow:hidden;
 }
 
 .firstcol {
-    border: 1px solid white;
     display: inline-block;
     background-color: #ffd3b6;
     height: 10vh;
     padding: 10px 0px;
-    margin: 0px;
     text-align: center;
+    margin: 3px;
 }
 
 .subject,
 .free {
-    position: relative;
     display: inline-block;
     height: 10vh;
-    padding: 10px 0px;
-    border: 1px solid white;
+    padding: 10px;
+    border: 1px solid black;
     margin: 0px;
+    line-height: 100%;
     text-align: center;
 }
 
-.subject {
-    background-color: rgb(223, 223, 110);
-}
-
 .free {
-    background-color: rgba(221, 94, 94, 0.692);
+    background-color: chocolate;
 }
 
-.inner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
 
-.links {
-    background-color: rgba(61, 199, 134, 0.884);
-    position: absolute;
-    width:100%;
-    bottom:0;
-    
-    display: none;
-   
-}
-
-.subject:hover>.links {
-    display: block;
-}
-.subject:hover> .inner{
-   top:30%;
-}
-
-.yes:hover{
-    fill:green;
-}
-.no:hover{
-    fill:red;
-}
-.hday:hover{
-    fill:blue;
-}
-.present{
-    background-color:Green;
-}
-.absent{
-    background-color:red;
-}
-.holiday{
-    background-color:blue;
-}
+/* table {
+    flex: 1;
+    table-layout: fixed;
+    width: 100%;
+} */
 
 
 /* Style the tab content */
@@ -278,6 +234,31 @@ a {
     border: 1px solid #ccc;
     border-top: none;
 }
+
+
+/* th {
+    flex-grow: 1;
+    width: 10vw;
+    height: 10vh;
+    padding: 10px, 10px;
+    background-color: #ffd3b6;
+}
+
+td {
+    flex-grow: 1;
+    width: 10vw;
+    height: 10vh;
+    padding: 10px, 10px;
+    background-color: #dcedc1;
+} */
+
+
+/*present color= background-color: #a8e6cf      absent color= background-color: #ffaaa5 */
+
+
+/* .free {
+    background-color: #b2bec3;
+} */
 
 
 /* for todo  */
