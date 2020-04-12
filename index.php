@@ -1,7 +1,6 @@
 <?php
 session_start();
 require './db.php';
-require 'subject.php';
 if(isset($_GET['present'])){
     $weekid=$_GET['weekid'];
    $present=$_GET['present'];
@@ -32,6 +31,8 @@ if(isset($_GET['holiday'])){
         mysqli_query($db, $query) or die(mysqli_error($db));
     }
 }
+require 'subject.php';
+
 $now = time() ; //for indian timestamp 
 
 if (!isset($_SESSION['name'])) {
