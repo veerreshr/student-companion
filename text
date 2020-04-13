@@ -27,3 +27,19 @@ date_default_timezone_set('Asia/Kolkata');
 
 
 19800 //+5:30 , required to substract this from local time
+
+
+// for making the circle animate evertime 
+
+$(function() {
+    // instantiate the plugin
+    ...
+    // update
+    $('.chart').data('easyPieChart').update(40);
+    ...
+    // disable animation
+    $('.chart').data('easyPieChart').disableAnimation();
+    ...
+    // enable animation
+    $('.chart').data('easyPieChart').enableAnimation();
+});  
