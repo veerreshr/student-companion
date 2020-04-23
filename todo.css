@@ -1,0 +1,133 @@
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    #wrapper {
+        background: #F2994A;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    #wrapper #todo-input {
+        min-height: 30vh;
+        width: 50vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #wrapper p {
+        padding: 20px;
+        margin: 10px;
+        font-size: 30px;
+        font-weight: 800;
+    }
+    
+    #wrapper #options {
+        display: block;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    #wrapper #options form {
+        display: inline-block;
+    }
+    
+    #wrapper #options form input {
+        padding: 10px;
+        width: 100%;
+        margin: 5px auto;
+    }
+    
+    #wrapper #options form button[type='submit'] {
+        padding: 10px;
+        width: 10%;
+        margin: 5px auto;
+    }
+    
+    #wrapper #options form .datetime {
+        width: 100%;
+    }
+    
+    #wrapper #options form .text {
+        width: 100%;
+        display: flex;
+    }
+    
+    #wrapper #todo-output {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50vw;
+    }
+    
+    #wrapper #todo-output .todo {
+        display: flex;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+    
+    #wrapper #todo-output .todo li {
+        border: 0;
+        width: 70%;
+        background-color: white;
+        padding: 10px 0px 10px 20px;
+        margin: 0px 1px 2px 1px;
+        list-style: none;
+        overflow: auto;
+    }
+    
+    #wrapper #todo-output .todo button {
+        width: 10%;
+        border: 0;
+        padding: 10px 0px 10px 10px;
+        margin: 0px 1px 2px 1px;
+    }
+    
+    .todoheading {
+        background-color: rgb(39, 30, 30);
+        padding: 10px 0px 10px 20px;
+        width: 100%;
+        color: white;
+    }
+    
+    button:hover .fa {
+        color: #F2994A;
+        font-size: 25px;
+    }
+    
+    .checked button {
+        background-color: rgb(245, 181, 125);
+    }
+    
+    .notified {
+        color: #F2994A;
+    }
+    
+    #wrapper #todo-output .checked li {
+        text-decoration: line-through;
+        background: rgb(245, 181, 125);
+    }
+    
+    @media only screen and (max-width: 768px) {
+        #wrapper #todo-input,
+        #wrapper #todo-output {
+            width: 90vw;
+        }
+        .fa {
+            font-size: 15px;
+        }
+        button:hover .fa {
+            font-size: 20px;
+        }
+    }

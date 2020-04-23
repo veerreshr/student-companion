@@ -12,6 +12,7 @@ $result = mysqli_query($db, $query)  or die("connection failed at retrive");
 while($row = mysqli_fetch_assoc($result)){
 $dt=$row['dt'];
 if($dt>=(time()-600) && $dt<=time()){
+   
 $mail = new PHPMailer(TRUE);
 
 try {

@@ -43,3 +43,40 @@ $(function() {
     // enable animation
     $('.chart').data('easyPieChart').enableAnimation();
 });  
+
+Perfect, Your in the track 
+Thats awesome , you may leave next n classes
+Your going amazing, You may leave ur next 6+ classes
+Thats fantastic , you may leave ur next __ classes
+
+
+almost there, still 2 more classes
+U can cope up,4 more classes to attend
+oh no , u need to attend next 8 classes
+Ur in a wrong way , __ more classes to attened
+
+
+
+front - green #50d07d
+back-grey #b2cecf
+
+
+front - orange #DC3D24
+back - black #232B2B
+
+front- lime #D6ED17FF
+back - grey #606060FF
+
+front- blue #00539CFF
+back - peach #EEA47FFF
+
+mango #DAA03DFF
+tarrium #616247FF
+
+#ef1e25
+#aedaa6
+
+$barcolor=array("#00539CFF","#50d07d","#DC3D24","#D6ED17FF","#DAA03DFF","#ef1e25");
+$backcolor=array("#EEA47FFF","#b2cecf","#232B2B","#606060FF","#616247FF","#aedaa6");
+
+<i class="fa fa-circle" aria-hidden="true"></i>

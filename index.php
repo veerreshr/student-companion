@@ -5,34 +5,42 @@ if (isset($_GET['present'])) {
     $weekid = $_GET['weekid'];
     $present = $_GET['present'];
     $date = $_GET['date'];
-    $query = "select * from daily where weekid=$weekid and date=$date and id=" . $_SESSION['id'] . "";
+    $query = "select * from daily where weekid=$weekid and date='$date' and id=" . $_SESSION['id'] . "";
     $result = mysqli_query($db, $query);
-
+    if (! $result) {
+        echo("Error description: " . mysqli_error($db));
+       return;
+      }
+      if(mysqli_num_rows($result)!=0){
     $user = mysqli_fetch_assoc($result);
     if ($user['present'] == 1 || $user['present'] == 0) {
         $query = "update daily set present=$present ,holiday=0 where id=" . $_SESSION['id'] . " and weekid=$weekid and date='$date' ";
         mysqli_query($db, $query) or die(mysqli_error($db));
-    } else {
+    }} else {
 
         $query = "insert into daily (id,date,weekid,present,holiday) values(" . $_SESSION['id'] . ",'$date',$weekid,$present,0)";
         mysqli_query($db, $query) or die(mysqli_error($db));
     }
+    header('location: ./index.php');
+    return;
 }
 if (isset($_GET['holiday'])) {
     $weekid = $_GET['weekid'];
     $date = $_GET['date'];
     $holiday = $_GET['holiday'];
-    $query = "select * from daily where weekid=$weekid and date=$date and id=" . $_SESSION['id'] . "";
+    $query = "select * from daily where weekid=$weekid and date='$date' and id=" . $_SESSION['id'] . "";
     $result = mysqli_query($db, $query);
-
+    if(mysqli_num_rows($result)!=0){
     $user = mysqli_fetch_assoc($result);
     if ($user['holiday'] == 1 || $user['present'] == 1 || $user['present'] == 0) {
         $query = "update daily set holiday=$holiday ,present=NULL where id=" . $_SESSION['id'] . " and weekid=$weekid and date='$date' ";
         mysqli_query($db, $query) or die(mysqli_error($db));
-    } else {
+    }} else {
         $query = "insert into daily (id,date,weekid,holiday) values(" . $_SESSION['id'] . ",'$date',$weekid,$holiday)";
         mysqli_query($db, $query) or die(mysqli_error($db));
     }
+    header('location: ./index.php');
+    return;
 }
 require 'subject.php';
 
@@ -63,9 +71,12 @@ if (isset($_GET['logout'])) {
 <html lang="en">
 
 <head>
+    <script src="https://use.fontawesome.com/0eb2c0a554.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student companion </title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="style1.css">
 
 
@@ -81,19 +92,20 @@ if (isset($_GET['logout'])) {
                 Student Companion<sub></sub>
             </div>
             <div class="menulinks">
-                <a href="#">Home<i class="fa fa-home"></i></a>
-                <a href="stats.php">Settings<i class="fa fa-bar-chart"></i></a>
+                <div class="a"><a href="#">Home <i class="fa fa-home"></i></a></div>
+                <div class="a"><a href="stats.php">Settings <i class="fa fa-cog" aria-hidden="true"></i></i></a></div>
                 <!--<a href="#">Feedback<i class="fa fa-comment-o"></i></a>-->
-                <a href="index.php?logout='1'">Logout<i class="fa fa-sign-out"></i></a>
+                <div class="a"><a href="index.php?logout='1'">Logout <i class="fa fa-sign-out"></i></a></div>
             </div>
         </div>
     </div>
     <div class="main">
         <div class="tab">
-            <button class="tablinks" onclick="shuffle(event, 'timetable')" id="defaultOpen">Timetable</button>
+            <button class="tablinks" onclick="shuffle(event, 'timetable')" id='defaultOpen'>Timetable</button>
             <button class="tablinks" onclick="shuffle(event, 'todo')">Take note</button>
             <button class="tablinks" id="remarkslink" onclick="shuffle(event, 'remarks')">Remark</button>
         </div>
+        <!-----------------------------------------------------------------TIMETABLE---------------------------------------------------------------------->
         <div id="timetable" class="tabcontent">
 
             <div class="row1">
@@ -129,77 +141,109 @@ if (isset($_GET['logout'])) {
             <?php subject($now); ?>
 
         </div>
+<!-----------------------------------------------------------------TODO--------------------------------------------------------------------------->
         <div id="todo" class="tabcontent">
-            <div id="myDIV" class="todoheader">
-                <h2 style="margin:5px">My To Do List</h2>
-                <input type="text" id="myInput" placeholder="Title...">
-                <input type="date" name="" id="">
-                <input type="time" name="" id="">
-                <input type="week" name="" id="">
-
-                <span onclick="newElement()" class="addBtn">Add</span>
-
-            </div>
-
-            <ul id="myUL">
-                <li>Hit the gym</li>
-                <li class="checked">Pay bills</li>
-                <li>Meet George</li>
-                <li>Buy eggs</li>
-                <li>Read a book</li>
-                <li>Organize office</li>
-            </ul>
-
+            <iframe src="todo.php" frameborder="0" style="position: relative; height:100%; width:100%;"></iframe>
         </div>
+<!-----------------------------------------------------------------REMARKS------------------------------------------------------------------------->
         <div id="remarks" class="tabcontent">
-            <div class="outerbox">
-                <div class="card">
-                    <div class="graph">
-                    <div class="chart" data-percent="73" data-scale-color="#ffb400"><p>73%</p></div>
-                    </div>
-                    <div class="description">
-                        <h2>Classic Peace Lily</h2>
-                        <h4>Popular House Plant</h4>
-                        <h1>$18</h1>
-                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
-                        <button>calendar</button>
+            <?php
+            $barcolor = array("#50d07d","#00539CFF","#DC3D24", "#D6ED17FF", "#DAA03DFF", "#ef1e25");
+            $backcolor = array("#b2cecf","#EEA47FFF", "#232B2B", "#606060FF", "#616247FF", "#aedaa6");
+            $subjects = array();
+            $query = "select goal from register where id=" . $_SESSION['id'];
+            $result = mysqli_query($db, $query) or die(mysqli_error($db));
+            $row = mysqli_fetch_assoc($result);
+            $goal=$row['goal'];
+            $query="select subject from week  where id=1 group by subject";
+            $result= mysqli_query($db, $query) or die(mysqli_error($db));
+            while ($row = mysqli_fetch_assoc($result)) {
+                array_push($subjects, $row['subject']);
+               
+            }
+            for ($i = 0; $i < count($subjects); $i++) {
+                $colorindex = $i % 6;
+                $lastsevendays = array();
+                $query = "select count(*)as pre from daily inner join week on daily.weekid=week.weekid and daily.id=week.id where present=1 and subject='" . $subjects[$i] . "' and holiday <> 1 and daily.id=" . $_SESSION['id'];
+                $result = mysqli_query($db, $query) or die(mysqli_error($db));
+                $row = mysqli_fetch_assoc($result);
+                $attended = $row['pre'];
+                $query = "select count(*)as abs from daily inner join week on daily.weekid=week.weekid and daily.id=week.id where present=0  and subject='" . $subjects[$i] . "' and holiday <> 1 and daily.id=" . $_SESSION['id'];
+                $result = mysqli_query($db, $query) or die(mysqli_error($db));
+                $row = mysqli_fetch_assoc($result);
+                $absent = $row['abs'];
+                $total = $attended + $absent;   //total number of classes
+                $percentage =($attended /$total) *100; //current att percentage
+                $acceptableabsents = ((100 - $goal) * $total) / 100; //gives the no of absents that can be accepted for getting attendence goal
+                $diff = $acceptableabsents - $absent; //if positive , u can absent for that many classes, if negative u need to attend those many, if zero, its perfect
+                if ($diff > 0) {
+                    if ($diff <= 0) {
+                        $statement = "Thats awesome , you may leave next $diff classes";
+                    } elseif ($diff <= 5) {
+                        $statement = "Your going amazing, You may leave ur next $diff classes";
+                    } else {
+                        $statement = "Thats fantastic , you may leave ur next $diff classes";
+                    }
+                } elseif ($diff < 0) {
+                    if ($diff >= -2) {
+                        $statement = "almost there, still " . abs($diff) . " more classes";
+                    } elseif ($diff >= -4) {
+                        $statement = "U can cope up," . abs($diff) . " more classes to attend";
+                    } elseif ($diff >= -8) {
+                        $statement = "oh no , u need to attend next " . abs($diff) . " classes";
+                    } else {
+                        $statement = "Ur in a wrong way , " . abs($diff) . " more classes to attened";
+                    }
+                } else {
+                    $statement = "Perfect, Your in the track ";
+                }
+            
+            ?>
+                <div class="outerbox" style="background-color: <?php echo $backcolor[$colorindex]; ?>">
+                    <div class="card">
+                        <div class="graph">
+                            <div class="chart" data-percent="<?php echo $percentage; ?>" data-bar-color="<?php echo $barcolor[$colorindex];   ?>" data-scale-color="#ffb400">
+                                <p><?php echo $percentage; ?></p>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <h2><?php echo $subjects[$i]; ?></h2>
+                            <h4></h4>
+                            <h1><?php echo $attended . "/" . $total; ?></h1>
+                            <h4></h4>
+                            <p><?php echo $statement;  ?></p>
+                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button >calendar</button></div>
+                            
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="outerbox">
-                <div class="card">
-                    <div class="graph">
-                    <div class="chart" data-percent="60" data-scale-color="#ffb400" data-bar-color="blue"><p>73%</p></div>
-                    </div>
-                    <div class="description">
-                        <h2>Classic Peace Lily</h2>
-                        <h4>Popular House Plant</h4>
-                        <h1>$18</h1>
-                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
-                        <button>calendar</button>
 
-                    </div>
-                </div>
-            </div>
 
+            <?php
+            }
+
+
+            ?>
         </div>
     </div>
     <div class="footer"></div>
+    <!-----------------------------------------------------------------JAVASCRIPT--------------------------------------------------------------------------->
+    <!-----------------------------------------------------------------REMARKS------------------------------------------------------------------------>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="jquery.easypiechart.js"></script>
     <script>
-    $("#remarkslink").click(function() {
-        $('.chart').easyPieChart({
-            scaleLength:8,
-            size:200,
-            lineWidth:6,
+        $("#remarkslink").click(function() {
+            $('.chart').easyPieChart({
+                scaleLength: 8,
+                size: 200,
+                lineWidth: 6,
+            });
         });
-    });
-</script>
+    </script>
 
-  <script>
-    
+    <script>
+        //------------------------------------------------------------TIMETABLE---------------------------------------------------------------------------
         // for automating the sizes of subjects
         var oneunit;
 
@@ -222,12 +266,7 @@ if (isset($_GET['logout'])) {
 
             }
         }
-
         // end of automating sizes
-
-
-
-
         //adding free classes to everyday
         function addfree(day) {
             var startsAt = document.getElementById('startendtime').getAttribute("start");
@@ -320,64 +359,6 @@ if (isset($_GET['logout'])) {
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
         //end for tags
-        //for todo
-        // Create a "close" button and append it to each list item
-        var myNodelist = document.getElementsByTagName("LI");
-        var i;
-        for (i = 0; i < myNodelist.length; i++) {
-            var span = document.createElement("SPAN");
-            var txt = document.createTextNode("\u00D7");
-            span.className = "close";
-            span.appendChild(txt);
-            myNodelist[i].appendChild(span);
-        }
-
-        // Click on a close button to hide the current list item
-        var close = document.getElementsByClassName("close");
-        var i;
-        for (i = 0; i < close.length; i++) {
-            close[i].onclick = function() {
-                var div = this.parentElement;
-                div.style.display = "none";
-            }
-        }
-
-        // Add a "checked" symbol when clicking on a list item
-        var list = document.querySelector('ul');
-        list.addEventListener('click', function(ev) {
-            if (ev.target.tagName === 'LI') {
-                ev.target.classList.toggle('checked');
-            }
-        }, false);
-
-        // Create a new list item when clicking on the "Add" button
-        function newElement() {
-            var li = document.createElement("li");
-            var inputValue = document.getElementById("myInput").value;
-            var t = document.createTextNode(inputValue);
-            li.appendChild(t);
-            if (inputValue === '') {
-                alert("You must write something!");
-            } else {
-                document.getElementById("myUL").appendChild(li);
-            }
-            document.getElementById("myInput").value = "";
-
-            var span = document.createElement("SPAN");
-            var txt = document.createTextNode("\u00D7");
-            span.className = "close";
-            span.appendChild(txt);
-            li.appendChild(span);
-
-            for (i = 0; i < close.length; i++) {
-                close[i].onclick = function() {
-                    var div = this.parentElement;
-                    div.style.display = "none";
-                }
-            }
-        }
-
-        //end for todo
     </script>
 
 
