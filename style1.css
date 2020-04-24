@@ -553,7 +553,7 @@ input {
 }
 
 .description div button:hover {
-   border-color:inherit;
+    border-color: inherit;
     color: inherit;
     cursor: pointer;
 }
