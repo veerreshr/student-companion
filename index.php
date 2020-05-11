@@ -7,16 +7,17 @@ if (isset($_GET['present'])) {
     $date = $_GET['date'];
     $query = "select * from daily where weekid=$weekid and date='$date' and id=" . $_SESSION['id'] . "";
     $result = mysqli_query($db, $query);
-    if (! $result) {
-        echo("Error description: " . mysqli_error($db));
-       return;
-      }
-      if(mysqli_num_rows($result)!=0){
-    $user = mysqli_fetch_assoc($result);
-    if ($user['present'] == 1 || $user['present'] == 0) {
-        $query = "update daily set present=$present ,holiday=0 where id=" . $_SESSION['id'] . " and weekid=$weekid and date='$date' ";
-        mysqli_query($db, $query) or die(mysqli_error($db));
-    }} else {
+    if (!$result) {
+        echo ("Error description: " . mysqli_error($db));
+        return;
+    }
+    if (mysqli_num_rows($result) != 0) {
+        $user = mysqli_fetch_assoc($result);
+        if ($user['present'] == 1 || $user['present'] == 0) {
+            $query = "update daily set present=$present ,holiday=0 where id=" . $_SESSION['id'] . " and weekid=$weekid and date='$date' ";
+            mysqli_query($db, $query) or die(mysqli_error($db));
+        }
+    } else {
 
         $query = "insert into daily (id,date,weekid,present,holiday) values(" . $_SESSION['id'] . ",'$date',$weekid,$present,0)";
         mysqli_query($db, $query) or die(mysqli_error($db));
@@ -30,12 +31,13 @@ if (isset($_GET['holiday'])) {
     $holiday = $_GET['holiday'];
     $query = "select * from daily where weekid=$weekid and date='$date' and id=" . $_SESSION['id'] . "";
     $result = mysqli_query($db, $query);
-    if(mysqli_num_rows($result)!=0){
-    $user = mysqli_fetch_assoc($result);
-    if ($user['holiday'] == 1 || $user['present'] == 1 || $user['present'] == 0) {
-        $query = "update daily set holiday=$holiday ,present=NULL where id=" . $_SESSION['id'] . " and weekid=$weekid and date='$date' ";
-        mysqli_query($db, $query) or die(mysqli_error($db));
-    }} else {
+    if (mysqli_num_rows($result) != 0) {
+        $user = mysqli_fetch_assoc($result);
+        if ($user['holiday'] == 1 || $user['present'] == 1 || $user['present'] == 0) {
+            $query = "update daily set holiday=$holiday ,present=NULL where id=" . $_SESSION['id'] . " and weekid=$weekid and date='$date' ";
+            mysqli_query($db, $query) or die(mysqli_error($db));
+        }
+    } else {
         $query = "insert into daily (id,date,weekid,holiday) values(" . $_SESSION['id'] . ",'$date',$weekid,$holiday)";
         mysqli_query($db, $query) or die(mysqli_error($db));
     }
@@ -141,25 +143,24 @@ if (isset($_GET['logout'])) {
             <?php subject($now); ?>
 
         </div>
-<!-----------------------------------------------------------------TODO--------------------------------------------------------------------------->
+        <!-----------------------------------------------------------------TODO--------------------------------------------------------------------------->
         <div id="todo" class="tabcontent">
             <iframe src="todo.php" frameborder="0" style="position: relative; height:100%; width:100%;"></iframe>
         </div>
-<!-----------------------------------------------------------------REMARKS------------------------------------------------------------------------->
+        <!-----------------------------------------------------------------REMARKS------------------------------------------------------------------------->
         <div id="remarks" class="tabcontent">
             <?php
-            $barcolor = array("#50d07d","#00539CFF","#DC3D24", "#D6ED17FF", "#DAA03DFF", "#ef1e25");
-            $backcolor = array("#b2cecf","#EEA47FFF", "#232B2B", "#606060FF", "#616247FF", "#aedaa6");
+            $barcolor = array("#50d07d", "#00539CFF", "#DC3D24", "#D6ED17FF", "#DAA03DFF", "#ef1e25");
+            $backcolor = array("#b2cecf", "#EEA47FFF", "#232B2B", "#606060FF", "#616247FF", "#aedaa6");
             $subjects = array();
             $query = "select goal from register where id=" . $_SESSION['id'];
             $result = mysqli_query($db, $query) or die(mysqli_error($db));
             $row = mysqli_fetch_assoc($result);
-            $goal=$row['goal'];
-            $query="select subject from week  where id=1 group by subject";
-            $result= mysqli_query($db, $query) or die(mysqli_error($db));
+            $goal = $row['goal'];
+            $query = "select subject from week  where id=1 group by subject";
+            $result = mysqli_query($db, $query) or die(mysqli_error($db));
             while ($row = mysqli_fetch_assoc($result)) {
                 array_push($subjects, $row['subject']);
-               
             }
             for ($i = 0; $i < count($subjects); $i++) {
                 $colorindex = $i % 6;
@@ -173,7 +174,7 @@ if (isset($_GET['logout'])) {
                 $row = mysqli_fetch_assoc($result);
                 $absent = $row['abs'];
                 $total = $attended + $absent;   //total number of classes
-                $percentage =($attended /$total) *100; //current att percentage
+                $percentage = ($attended / $total) * 100; //current att percentage
                 $acceptableabsents = ((100 - $goal) * $total) / 100; //gives the no of absents that can be accepted for getting attendence goal
                 $diff = $acceptableabsents - $absent; //if positive , u can absent for that many classes, if negative u need to attend those many, if zero, its perfect
                 if ($diff > 0) {
@@ -197,7 +198,7 @@ if (isset($_GET['logout'])) {
                 } else {
                     $statement = "Perfect, Your in the track ";
                 }
-            
+
             ?>
                 <div class="outerbox" style="background-color: <?php echo $backcolor[$colorindex]; ?>">
                     <div class="card">
@@ -212,8 +213,8 @@ if (isset($_GET['logout'])) {
                             <h1><?php echo $attended . "/" . $total; ?></h1>
                             <h4></h4>
                             <p><?php echo $statement;  ?></p>
-                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button >calendar</button></div>
-                            
+                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button>calendar</button></div>
+
 
                         </div>
                     </div>
@@ -229,6 +230,8 @@ if (isset($_GET['logout'])) {
     </div>
     <div class="footer"></div>
     <!-----------------------------------------------------------------JAVASCRIPT--------------------------------------------------------------------------->
+    <!-----------------------------------------------------------------circular pointer effect--------------------------------------------------------------------------->
+
     <!-----------------------------------------------------------------REMARKS------------------------------------------------------------------------>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="jquery.easypiechart.js"></script>
@@ -360,7 +363,43 @@ if (isset($_GET['logout'])) {
         document.getElementById("defaultOpen").click();
         //end for tags
     </script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
 
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyA8AwDcUHy6ElmLCbofMHk2Klkxj8wnFtc",
+            authDomain: "student-companion-90b21.firebaseapp.com",
+            databaseURL: "https://student-companion-90b21.firebaseio.com",
+            projectId: "student-companion-90b21",
+            storageBucket: "student-companion-90b21.appspot.com",
+            messagingSenderId: "324654948039",
+            appId: "1:324654948039:web:41c74bf788d37ce1f028e2",
+            measurementId: "G-HEEF847MJ1"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+    const messaging=firebase.messaging();
+    messaging().requestPermission()
+    .then(function(){
+        console.log("p");
+        return messaging.getToken();
+    })
+    .then(function(token){
+        console.log(token);
+    })
+    .catch(function(err){
+        console.log(err);
+    });
+
+    </script>
 
 </body>
 

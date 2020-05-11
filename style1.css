@@ -49,22 +49,9 @@
     transition: 0.6s all linear;
 }
 
-.menulinks .a:hover {
-    width: 70px;
-    border-radius: 50%;
-    background-color: white;
-    color: black;
-}
-
-a {
+.menulinks a {
     text-decoration: none;
     color: white;
-    transition: 2s all ease;
-}
-
-.menulinks .a:hover a {
-    color: black;
-    font-size: 12px;
 }
 
 .menu {

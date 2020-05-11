@@ -29,12 +29,11 @@
         <div class="mySlides fade">
             <img src="../assets/img6.jpg" style="width:100%">
         </div>
-        <div class="mySlides fade">
-            <img src="../assets/img7.jpg" style="width:100%">
-        </div>
+        
         <div class="mySlides fade">
             <img src="../assets/img8.jpg" style="width:100%">
         </div>
+        
 
     </div>
     <div class="superwrap">
@@ -48,10 +47,10 @@
             <div id="register" class="tabcontent">
                 <div class="container">
                     <form method="post" action="login.php">
-                        <centre>
-                            <h3 style="color: black;">Register here</h3>
-                        </centre><br>
-                        <?php include('error.php'); ?><br>
+                        
+                        <h3 style="color: black;">Register here</h3>
+                        <br>
+                        <?php include('error.php'); ?>
                         <label for="name">
                             NAME
                         </label><br>
@@ -88,9 +87,8 @@
             <div id="login" class="tabcontent">
                 <div class="container">
                     <form action="login.php" method="post">
-                        <centre>
-                            <h3 style="color: black;">Enter Login Details!</h3>
-                        </centre><br>
+                        <h3 style="color: black;">Enter Login Details!</h3>
+                        
                         <?php include('error.php'); ?><br>
                         <label for="email">
                             Email
@@ -133,7 +131,7 @@
 
             slides[slideIndex - 1].style.display = "block";
 
-            setTimeout(showSlides, 3000); // Change image every 2 seconds
+            setTimeout(showSlides, 4000); // Change image every 4 seconds
         }
         //for tabs
         function shuffle(evt, sectionname) {
