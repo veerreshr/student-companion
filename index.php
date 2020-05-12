@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(E_ALL);
 session_start();
 require './db.php';
 if (isset($_GET['present'])) {
@@ -57,7 +60,7 @@ $query = "select * from week where id='" . $_SESSION['id'] . "'";
 $result = mysqli_query($db, $query);
 $rowcount = mysqli_num_rows($result);
 if ($rowcount == 0) {
-    header('location: ./details/details.php');
+    header('location: ./details/entry.html');
 }
 
 
@@ -150,6 +153,23 @@ if (isset($_GET['logout'])) {
         <!-----------------------------------------------------------------REMARKS------------------------------------------------------------------------->
         <div id="remarks" class="tabcontent">
             <?php
+            function needtoattend($a, $b, $c)
+            {
+                $d = 0;
+                while (((($a + $d) / ($b + $d))*100) < $c) {
+                    $d = $d + 1;
+                }
+                return $d;
+            }
+            function mayleave($a, $b, $c)
+            {
+                $d = 0;
+                while (((($a - $d) / ($b - $d))*100) >= $c) {
+                    $d = $d + 1;
+                }
+                $d = $d - 1;
+                return $d;
+            }
             $barcolor = array("#50d07d", "#00539CFF", "#DC3D24", "#D6ED17FF", "#DAA03DFF", "#ef1e25");
             $backcolor = array("#b2cecf", "#EEA47FFF", "#232B2B", "#606060FF", "#616247FF", "#aedaa6");
             $subjects = array();
@@ -157,14 +177,15 @@ if (isset($_GET['logout'])) {
             $result = mysqli_query($db, $query) or die(mysqli_error($db));
             $row = mysqli_fetch_assoc($result);
             $goal = $row['goal'];
-            $query = "select subject from week  where id=1 group by subject";
+            $query = "select subject from week  where id=" . $_SESSION['id'] . " group by subject";
             $result = mysqli_query($db, $query) or die(mysqli_error($db));
             while ($row = mysqli_fetch_assoc($result)) {
                 array_push($subjects, $row['subject']);
             }
             for ($i = 0; $i < count($subjects); $i++) {
                 $colorindex = $i % 6;
-                $lastsevendays = array();
+                $statement=null;
+
                 $query = "select count(*)as pre from daily inner join week on daily.weekid=week.weekid and daily.id=week.id where present=1 and subject='" . $subjects[$i] . "' and holiday <> 1 and daily.id=" . $_SESSION['id'];
                 $result = mysqli_query($db, $query) or die(mysqli_error($db));
                 $row = mysqli_fetch_assoc($result);
@@ -175,45 +196,45 @@ if (isset($_GET['logout'])) {
                 $absent = $row['abs'];
                 $total = $attended + $absent;   //total number of classes
                 $percentage = ($attended / $total) * 100; //current att percentage
-                $acceptableabsents = ((100 - $goal) * $total) / 100; //gives the no of absents that can be accepted for getting attendence goal
-                $diff = $acceptableabsents - $absent; //if positive , u can absent for that many classes, if negative u need to attend those many, if zero, its perfect
-                if ($diff > 0) {
-                    if ($diff <= 0) {
-                        $statement = "Thats awesome , you may leave next $diff classes";
-                    } elseif ($diff <= 5) {
-                        $statement = "Your going amazing, You may leave ur next $diff classes";
+                if ($percentage < $goal) {
+                    $need1 = needtoattend($attended, $total, $goal);
+                    if ($need1 >= 8) {
+                        $statement = "Ur in a wrong way , " . $need1 . " more classes to attened";
+                    } elseif ($need1 >= 6) {
+
+                        $statement = "U can cope up," . $need1 . " more classes to attend";
+                    } elseif ($need1 >= 3) {
+                        $statement = "$need1 more classes to attend";
                     } else {
-                        $statement = "Thats fantastic , you may leave ur next $diff classes";
+                        $statement = "your almost there, still " . $need1 . " more classes";
                     }
-                } elseif ($diff < 0) {
-                    if ($diff >= -2) {
-                        $statement = "almost there, still " . abs($diff) . " more classes";
-                    } elseif ($diff >= -4) {
-                        $statement = "U can cope up," . abs($diff) . " more classes to attend";
-                    } elseif ($diff >= -8) {
-                        $statement = "oh no , u need to attend next " . abs($diff) . " classes";
+                } elseif ($percentage > $goal) {
+                    $leave1 =mayleave($attended, $total, $goal);
+                    if ($leave1 <= 2) {
+                        $statement = "Thats awesome , you may leave1 next " . $leave1 . " classes";
+                    } elseif ($leave1 <= 5) {
+                        $statement = "Your going amazing, You may leave1 ur next " . $leave1 . " classes";
                     } else {
-                        $statement = "Ur in a wrong way , " . abs($diff) . " more classes to attened";
+                        $statement = "Thats fantastic , you may leave1 ur next " . $leave1 . " classes";
                     }
-                } else {
+                } elseif ($percentage == $goal) {
                     $statement = "Perfect, Your in the track ";
                 }
-
             ?>
                 <div class="outerbox" style="background-color: <?php echo $backcolor[$colorindex]; ?>">
                     <div class="card">
                         <div class="graph">
                             <div class="chart" data-percent="<?php echo $percentage; ?>" data-bar-color="<?php echo $barcolor[$colorindex];   ?>" data-scale-color="#ffb400">
-                                <p><?php echo $percentage; ?></p>
+                                <p><?php echo round($percentage, 2); ?></p>
                             </div>
                         </div>
                         <div class="description">
                             <h2><?php echo $subjects[$i]; ?></h2>
                             <h4></h4>
-                            <h1><?php echo $attended . "/" . $total; ?></h1>
+                            <h1><?php echo "$attended /  $total"; ?></h1>
                             <h4></h4>
-                            <p><?php echo $statement;  ?></p>
-                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button>calendar</button></div>
+                            <p><?php if($statement==null){echo "";} else {echo $statement;}  ?></p>
+                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button onclick="location='./calendar.php?subject=<?php echo $subjects[$i];?>'">calendar</button></div>
 
 
                         </div>
@@ -224,9 +245,13 @@ if (isset($_GET['logout'])) {
             <?php
             }
 
-
             ?>
         </div>
+    </div>
+    <div class="error">
+        <?php
+
+        ?>
     </div>
     <div class="footer"></div>
     <!-----------------------------------------------------------------JAVASCRIPT--------------------------------------------------------------------------->
@@ -361,44 +386,6 @@ if (isset($_GET['logout'])) {
 
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
-        //end for tags
-    </script>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
-
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyA8AwDcUHy6ElmLCbofMHk2Klkxj8wnFtc",
-            authDomain: "student-companion-90b21.firebaseapp.com",
-            databaseURL: "https://student-companion-90b21.firebaseio.com",
-            projectId: "student-companion-90b21",
-            storageBucket: "student-companion-90b21.appspot.com",
-            messagingSenderId: "324654948039",
-            appId: "1:324654948039:web:41c74bf788d37ce1f028e2",
-            measurementId: "G-HEEF847MJ1"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-
-    const messaging=firebase.messaging();
-    messaging().requestPermission()
-    .then(function(){
-        console.log("p");
-        return messaging.getToken();
-    })
-    .then(function(token){
-        console.log(token);
-    })
-    .catch(function(err){
-        console.log(err);
-    });
-
     </script>
 
 </body>

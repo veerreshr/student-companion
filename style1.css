@@ -141,13 +141,14 @@
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    background-color: #ABB5BA;
 }
 
 
 /* Style the buttons inside the tab */
 
 .tab button {
+    color: black;
     background-color: inherit;
     float: left;
     border: none;
@@ -169,7 +170,8 @@
 /* Create an active/current tablink class */
 
 .tab button.active {
-    background-color: #ccc;
+    background-color: #264653;
+    color: white;
 }
 
 .timetable {
@@ -201,18 +203,19 @@
     width: 10vw;
     height: 10vh;
     padding: 10px;
-    background-color: #ffd3b6;
+    background-color: #bfd8bd;
     border: 1px solid white;
     margin: 0px;
     text-align: center;
     overflow: hidden;
     font-family: 'Nunito', sans-serif;
+    font-size: 13px;
 }
 
 .firstcol {
     border: 1px solid white;
     display: inline-block;
-    background-color: #ffd3b6;
+    background-color: #bfd8bd;
     height: 10vh;
     padding: 10px 0px;
     margin: 0px;
@@ -232,12 +235,12 @@
 }
 
 .subject {
-    background-color: rgb(223, 223, 110);
+    background-color: #dce1de;
     font-family: 'Sen', sans-serif;
 }
 
 .free {
-    background-color: rgba(221, 94, 94, 0.692);
+    background-color: #f3ffbd;
 }
 
 .inner {
@@ -248,7 +251,7 @@
 }
 
 .links {
-    background-color: rgba(61, 199, 134, 0.884);
+    background-color: #b5b682;
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -264,27 +267,27 @@
 }
 
 .yes:hover {
-    fill: green;
+    fill: #70c1b3;
 }
 
 .no:hover {
-    fill: red;
+    fill: #e63946;
 }
 
 .hday:hover {
-    fill: blue;
+    fill: #86bbd8;
 }
 
 .present {
-    background-color: Green;
+    background-color: #70c1b3;
 }
 
 .absent {
-    background-color: red;
+    background-color: #e63946;
 }
 
 .holiday {
-    background-color: blue;
+    background-color: #86bbd8;
 }
 
 
