@@ -98,7 +98,7 @@ if (isset($_GET['logout'])) {
             </div>
             <div class="menulinks">
                 <div class="a"><a href="#">Home <i class="fa fa-home"></i></a></div>
-                <div class="a"><a href="stats.php">Settings <i class="fa fa-cog" aria-hidden="true"></i></i></a></div>
+                <div class="a"><a href="./settingspage/settings.php">Settings <i class="fa fa-cog" aria-hidden="true"></i></i></a></div>
                 <!--<a href="#">Feedback<i class="fa fa-comment-o"></i></a>-->
                 <div class="a"><a href="index.php?logout='1'">Logout <i class="fa fa-sign-out"></i></a></div>
             </div>
