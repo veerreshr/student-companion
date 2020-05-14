@@ -156,7 +156,7 @@ if (isset($_GET['logout'])) {
             function needtoattend($a, $b, $c)
             {
                 $d = 0;
-                while (((($a + $d) / ($b + $d))*100) < $c) {
+                while (((($a + $d) / ($b + $d)) * 100) < $c) {
                     $d = $d + 1;
                 }
                 return $d;
@@ -164,7 +164,7 @@ if (isset($_GET['logout'])) {
             function mayleave($a, $b, $c)
             {
                 $d = 0;
-                while (((($a - $d) / ($b - $d))*100) >= $c) {
+                while (((($a - $d) / ($b - $d)) * 100) >= $c) {
                     $d = $d + 1;
                 }
                 $d = $d - 1;
@@ -184,7 +184,7 @@ if (isset($_GET['logout'])) {
             }
             for ($i = 0; $i < count($subjects); $i++) {
                 $colorindex = $i % 6;
-                $statement=null;
+                $statement = null;
 
                 $query = "select count(*)as pre from daily inner join week on daily.weekid=week.weekid and daily.id=week.id where present=1 and subject='" . $subjects[$i] . "' and holiday <> 1 and daily.id=" . $_SESSION['id'];
                 $result = mysqli_query($db, $query) or die(mysqli_error($db));
@@ -196,7 +196,7 @@ if (isset($_GET['logout'])) {
                 $absent = $row['abs'];
                 $total = $attended + $absent;   //total number of classes
                 $percentage = ($attended / $total) * 100; //current att percentage
-                if ($percentage < $goal) {
+                if (ceil($percentage) < $goal) {
                     $need1 = needtoattend($attended, $total, $goal);
                     if ($need1 >= 8) {
                         $statement = "Ur in a wrong way , " . $need1 . " more classes to attened";
@@ -208,16 +208,18 @@ if (isset($_GET['logout'])) {
                     } else {
                         $statement = "your almost there, still " . $need1 . " more classes";
                     }
-                } elseif ($percentage > $goal) {
-                    $leave1 =mayleave($attended, $total, $goal);
-                    if ($leave1 <= 2) {
-                        $statement = "Thats awesome , you may leave1 next " . $leave1 . " classes";
+                } elseif (ceil($percentage) > $goal) {
+                    $leave1 = mayleave($attended, $total, $goal);
+                    if ($leave1 == 0) {
+                        $statement = "Perfect, Your in the track ";
+                    } elseif ($leave1 <= 2) {
+                        $statement = "Thats awesome , you may leave next " . $leave1 . " classes";
                     } elseif ($leave1 <= 5) {
-                        $statement = "Your going amazing, You may leave1 ur next " . $leave1 . " classes";
+                        $statement = "Your going amazing, You may leave ur next " . $leave1 . " classes";
                     } else {
-                        $statement = "Thats fantastic , you may leave1 ur next " . $leave1 . " classes";
+                        $statement = "Thats fantastic , you may leave ur next " . $leave1 . " classes";
                     }
-                } elseif ($percentage == $goal) {
+                } elseif (ceil($percentage) == $goal ) {
                     $statement = "Perfect, Your in the track ";
                 }
             ?>
@@ -233,8 +235,12 @@ if (isset($_GET['logout'])) {
                             <h4></h4>
                             <h1><?php echo "$attended /  $total"; ?></h1>
                             <h4></h4>
-                            <p><?php if($statement==null){echo "";} else {echo $statement;}  ?></p>
-                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button onclick="location='./calendar.php?subject=<?php echo $subjects[$i];?>'">calendar</button></div>
+                            <p><?php if ($statement == null) {
+                                    echo "";
+                                } else {
+                                    echo $statement;
+                                }  ?></p>
+                            <div style="border-color:<?php echo $backcolor[$colorindex]; ?>;color:<?php echo $backcolor[$colorindex]; ?>"><button onclick="location='./calendar.php?subject=<?php echo $subjects[$i]; ?>'">calendar</button></div>
 
 
                         </div>

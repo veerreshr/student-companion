@@ -3,6 +3,50 @@ session_start();
 require './db.php';
 $id = $_SESSION['id'];
 $subjectopted = 0;
+$edit = 0;
+if (isset($_POST['editattendance'])) {
+    $subject = $_POST['subject'];
+    $attendance = $_POST['attendance'];
+    $dateofedit = $_POST['dateofedit'];
+    $dayOfWeek = date("D", strtotime($dateofedit));
+    $lastupdate = date("Y-m-d H:i:s",strtotime($dateofedit)+86399);
+    $query = "select weekid from week where id=" . $_SESSION['id'] . " and day='$dayOfWeek' and subject='$subject' and lastupdate <= '$lastupdate' ";
+    $results = mysqli_query($db, $query);
+    if (!$results) {
+        echo ("Error description: " . mysqli_error($db)." for getting weekid".$lastupdate);
+        return;
+    }
+    $user = mysqli_fetch_assoc($results);
+    $weekid=$user['weekid'];
+    
+    
+    
+    if ($attendance == 3) {
+        $query = "update daily set present=null , holiday=1 where weekid =$weekid and date='$dateofedit' and id=" . $_SESSION['id'];
+        $results = mysqli_query($db, $query);
+        if (!$results) {
+            echo ("Error description: " . mysqli_error($db));
+            return;
+        }
+    }
+    if ($attendance == 2) {
+        $query = "update daily set present=0 , holiday=0 where weekid=$weekid and date='$dateofedit' and id=" . $_SESSION['id'];
+        $results = mysqli_query($db, $query);
+        if (!$results) {
+            echo ("Error description: " . mysqli_error($db));
+            return;
+        }
+    }
+    if ($attendance == 1) {
+        $query = "update daily set present=1 , holiday=0 where weekid=$weekid and date='$dateofedit' and id=" . $_SESSION['id'];
+        $results = mysqli_query($db, $query);
+        if (!$results) {
+            echo ("Error description: " . mysqli_error($db));
+            return;
+        }
+    }
+    header("Location: ./calendar.php?subject=$subject&edit=1"); 
+}
 $list = array();
 if (isset($_GET['subject'])) {
     $subjectopted = 1;
@@ -19,6 +63,7 @@ if (isset($_GET['subject'])) {
             array_push($list, $a);
         }
     }
+    $edit = $_GET['edit'] == null ? 0 : 1;
 }
 
 ?>
@@ -33,36 +78,9 @@ if (isset($_GET['subject'])) {
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-  
+    <link rel="stylesheet" href="calendar.css">
     <style>
-          body {
-            background-color: #B0BBBF;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        
-        .choosesubject{
-            margin-top: 100px;
-            min-width: 40vw;
-            padding: 20px;
-        }
-        .choosesubject button{
-            margin-top: 10px;
-            width: 100%;
-            padding: 10px;
-           
-        }
-        .choosesubject label{
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .choosesubject select{
-            width: 100%;
-            margin: 10px;
-        }
+
     </style>
 </head>
 
@@ -160,29 +178,48 @@ if (isset($_GET['subject'])) {
             </div>
         </div>
         <!--<button name="jump" onclick="jump()">Go</button>-->
+        <?php if ($edit) { ?>
+            <div class="edit">
+                <form action="calendar.php" method="post">
+                    <div class="form-group">
+                        <label for="dateofedit">select a date for which you want to edit</label>
+                        <input type="date" class="form-control" name="dateofedit" max=<?php echo date('Y-m-d'); ?>>
+                    </div>
+                    <div class="form-group">
+                        <select name="attendance" id="">
+                            <option value="1">present</option>
+                            <option value="2">absent</option>
+                            <option value="3">holiday</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="subject" value="<?php echo $subject; ?>">
+                    <input type="submit" value="edit" name="editattendance" class="btn btn-primary">
+                </form>
+            </div>
+        <?php } ?>
     <?php }
     if (!$subjectopted) {
-        $sub=array();
+        $sub = array();
         $query = "select subject from week  where id=" . $_SESSION['id'] . " group by subject";
-            $result = mysqli_query($db, $query) or die(mysqli_error($db));
-            while ($row = mysqli_fetch_assoc($result)) {
-                array_push($sub, $row['subject']);
-            }
+        $result = mysqli_query($db, $query) or die(mysqli_error($db));
+        while ($row = mysqli_fetch_assoc($result)) {
+            array_push($sub, $row['subject']);
+        }
 
     ?>
-    <div class="choosesubject">
-        <label for="choose">Select the subject u want to access calendar view</label><select class="form-control col-sm-4" name="choose" id="choose">
-            <?php 
-            $i=0;
-            while($subj=$sub[$i]){
-                $i=$i+1;
-                echo "<option value=$subj>$subj</option>";
-            }
-            ?>
-            
-        </select>
-        <button onclick="activateCalendar()">Next</button>
-    </div>
+        <div class="choosesubject">
+            <label for="choose">Select the subject u want to access calendar view</label><select class="form-control col-sm-4" name="choose" id="choose">
+                <?php
+                $i = 0;
+                while ($subj = $sub[$i]) {
+                    $i = $i + 1;
+                    echo "<option value=$subj>$subj</option>";
+                }
+                ?>
+
+            </select>
+            <button onclick="activateCalendar()">Next</button>
+        </div>
 
     <?php
     }
@@ -190,9 +227,9 @@ if (isset($_GET['subject'])) {
     <!-- for getting calendar and dynamically allocating colors to dates -->
     <script>
         /* for choose subject */
-        function activateCalendar(){
-            var subject=document.getElementById("choose").value;
-            window.location.href="./calendar.php?subject="+subject;
+        function activateCalendar() {
+            var subject = document.getElementById("choose").value;
+            window.location.href = "./calendar.php?subject=" + subject + "&edit=1";
         }
         arrayofdata = <?php echo json_encode($list); ?>;
         for (m = 0; m < arrayofdata.length; m++) {

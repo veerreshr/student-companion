@@ -22,11 +22,9 @@ require "../db.php";
     </div>
     <div class="options">
         <button onclick="window.location.href='../calendar.php'">
-            calendar view
+            view and edit attendance for a particular day
         </button>
-        <button>
-            Edit range of attendance
-        </button>
+        
         <button>
             Edit timetable
         </button>

@@ -1,0 +1,38 @@
+body {
+    background-color: #B0BBBF;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.choosesubject {
+    margin-top: 100px;
+    min-width: 40vw;
+    padding: 20px;
+}
+
+.choosesubject button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+}
+
+.choosesubject label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.choosesubject select {
+    width: 100%;
+    margin: 10px;
+}
+
+.edit {
+    margin-top: 25px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
