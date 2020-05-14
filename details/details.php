@@ -6,8 +6,11 @@ if (!isset($_SESSION['name'])) {
     return;
 }
 require '../db.php';
+if(isset($_GET['editattendance'])){
+    $_SESSION['editedafter']=date("Y-m-d H:i:s",time());
+    header('location: ./details.php');
+}
 $_SESSION['weekid'] = 0;
-
 $query = "select MAX(weekid) AS max from week where id='" . $_SESSION['id'] . "'";
 $result = mysqli_query($db, $query)  or die(mysqli_error($db));
 if (mysqli_num_rows($result) > 0) {
@@ -55,6 +58,9 @@ if (isset($_POST['submit'])) {
     <div class="classes">
         <?php
         $query = "Select * from week where id='" . $_SESSION['id'] . "'";
+        if($_SESSION['editedafter']!=null){
+            $query=$query."and lastupdate >= '".$_SESSION['editedafter']."'";
+        }
         $result = mysqli_query($db, $query)  or die(mysqli_error($db));
         while ($user = mysqli_fetch_assoc($result)) {
         ?>

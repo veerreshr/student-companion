@@ -25,7 +25,7 @@ require "../db.php";
             view and edit attendance for a particular day
         </button>
         
-        <button>
+        <button onclick="window.location.href='../details/details.php?editattendance=1'">
             Edit timetable
         </button>
         <button>

@@ -64,6 +64,7 @@ body {
     box-shadow: transparent;
     pointer-events: visible;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .options button::after {
