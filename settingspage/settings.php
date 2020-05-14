@@ -1,5 +1,17 @@
 <?php 
 session_start();
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+
+    header("location: ../login/login.php");
+}
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+
+    header("location: ../login/login.php");
+}
 require "../db.php";
 ?>
 <!DOCTYPE html>
@@ -28,13 +40,13 @@ require "../db.php";
         <button onclick="window.location.href='../details/details.php?editattendance=1'">
             Edit timetable
         </button>
-        <button>
+        <button onclick="window.location.href='../changepassword/password.php'">
             change password
         </button>
         <button>
             privacy policy
         </button>
-        <button >
+        <button onclick="window.location.href='./settings.php?logout=1'">
            logout
         </button>
     </div>
